@@ -1,0 +1,16 @@
+.CellInput{
+    width:100%;
+    height:100%;
+    padding:0;
+    margin:0;
+    border:0;
+}
+
+.CellLabel{
+    overflow: hidden;
+    width: 100%;
+    height:100%;
+    text-overflow: clip;
+    white-space:nowrap;
+
+}
