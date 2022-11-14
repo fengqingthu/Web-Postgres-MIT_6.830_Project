@@ -27,9 +27,10 @@ const Cell: FunctionComponent<CellProps>=(props)=>{
         
     };
 
-    const updateCellValueState=(event: ChangeEvent<HTMLInputElement>)=>
+    const updateCellValueState=(event: ChangeEvent<HTMLInputElement>)=>{
         setCellValue(event.target.value);
-
+        console.log("new cell value",event.target.value);
+    }
     useEffect(()=>{
         return document.addEventListener("click", onClickOutsideInputHandler);
     },[])

@@ -1,0 +1,25 @@
+h3 {
+    margin:0px;
+  }
+  .contentContainer{
+    background-color: rgb(229, 229, 229);
+    max-width:80vw;
+    height:100vh;
+    /* border: 2px solid rgb(255, 0, 0); */
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+  }
+  .excelContainer{
+    
+    margin-top:20px;
+    overflow: scroll;
+    /* border: 2px solid rgb(0, 0, 0); */
+    
+    /* justify-content: center; */
+  }
+  .sqlInput{
+    /* margin:auto; */
+    /* border: 2px solid rgb(0, 0, 0); */
+    height: 40px;
+  }

@@ -1,0 +1,16 @@
+.sqlInput{
+    /* margin:auto; */
+    /* border: 10px solid rgb(0, 0, 0); */
+    height: 40px;
+    display: flex;
+    flex-direction: row;
+}
+
+.queryButton{
+  width: 10vw;
+  margin-left:2px;
+}
+
+.queryBox{
+  width: 80vw;
+}

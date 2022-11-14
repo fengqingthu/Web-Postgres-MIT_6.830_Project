@@ -17,8 +17,10 @@ const Sheet: FunctionComponent<SheetProps>=(props)=>{
     const numberOfRows=sheetSize.height/CELL_HEIGHT;
     console.log(numberOfColumns,numberOfRows);
     return (
+
         <table className={classes.Grid}>
             <tbody>
+              
               <Row>
                 {[...Array(numberOfColumns+1)].map((column,columnIndex)=>
                   columnIndex!==0?<AxisCell>{numberToString(columnIndex)}</AxisCell>:<AxisCell/>
@@ -38,6 +40,7 @@ const Sheet: FunctionComponent<SheetProps>=(props)=>{
                ))}
             </tbody>
         </table>
+
     );
 }
     
