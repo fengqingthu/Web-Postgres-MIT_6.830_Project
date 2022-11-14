@@ -6,6 +6,7 @@ import Row from '../Row/Row';
 import classes from './Sheet.module.css';
 import {SheetSizeState} from "../../store/SheetSizeState";
 import AxisCell from '../AxisCell/AxisCell';
+import { numberToString } from '../../utils/horizontalAxisCov';
 
 export type SheetProps={};
 
@@ -20,7 +21,7 @@ const Sheet: FunctionComponent<SheetProps>=(props)=>{
             <tbody>
               <Row>
                 {[...Array(numberOfColumns+1)].map((column,columnIndex)=>
-                  columnIndex!==0?<AxisCell>{columnIndex}</AxisCell>:<AxisCell/>
+                  columnIndex!==0?<AxisCell>{numberToString(columnIndex)}</AxisCell>:<AxisCell/>
                 )}
               </Row>
                {[...Array(numberOfRows)].map((row, rowIndex)=>(
