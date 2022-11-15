@@ -11,8 +11,7 @@ psql
 
 ### Install Dependencies
 ```
-npm install request
-npm install pg pg-cursor
+npm install
 ```
 
 ### Toy Database Setup
