@@ -23,7 +23,7 @@ const POOL = new Pool(CREDENTIAL)
 
 const CHUNK_ROWS = 1000     // number of rows in each file chunk
 const CHUNK_EXT = ".json"   // each chunk is written as json
-const CACHE_DIR = "./backend/cache"
+const CACHE_DIR = "./cache"
 
 const HOST = 'localhost'    // host that run the backend server
 const SERVER_PORT = 8000    // the port to receive http request
