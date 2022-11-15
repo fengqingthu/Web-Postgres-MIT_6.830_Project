@@ -1,4 +1,3 @@
-const request = require('request');
 const fs = require('fs');
 const path = require('path');
 const http = require("http");
@@ -27,7 +26,6 @@ const CACHE_DIR = "./cache"
 
 const HOST = 'localhost'    // host that run the backend server
 const SERVER_PORT = 8000    // the port to receive http request
-const CLIENT_PORT = 8001    // the port to receive server response
 
 // ========================= End of Global Constant ========================
 
@@ -39,17 +37,27 @@ const _init_directory = (dir) => {
 }
 
 const _process_request = async (req) => {
-    // parse req.url
+    // parse request
+
+    // get the sql query from body
+    let body = ''
+    await req.on('data', (data) => {
+        body += data
+    })
+    await req.on('end', () => {
+    })
+
     let fields = req.url.split('/').slice(1,)
 
-    // FIXME: since using url to pass sql query doesn't work for now, construct a query for testing
-    let query_text = `SELECT * FROM scores WHERE sid < ${parseInt(fields[0])}`
-    let read_only = (fields[1] === 'true')
+    let query_text = body
+    let read = (fields[0] === 'read')
+
+    console.log(`Get HTTP request: Query: ${query_text}, Read-only: ${read}`)
 
     // process the query
     const client = await POOL.connect()     // a client per request
 
-    if (!read_only) {
+    if (!read) {
         // since we don't cache update query, handle it separately
         await client.query(query_text, [], () => {
             client.release()
@@ -59,8 +67,13 @@ const _process_request = async (req) => {
 
     // initialize the folder to cache query result
     let query_cache_dir = path.join(CACHE_DIR, query_text)
-    // console.log(query_cache_dir)
-    _init_directory(query_cache_dir)
+
+    if (fs.existsSync(query_cache_dir)) {
+        // already done or currently working on query
+        client.release()
+        return -1
+    }
+    fs.mkdirSync(query_cache_dir)
 
     const cursor = client.query(new Cursor(query_text, []))
 
@@ -75,18 +88,6 @@ const _process_request = async (req) => {
             // upon finish writing each chunk, send the chunk path via http
             if (err)
                 console.log("_process_request::writeFile: Unexpected: " + err)
-
-            // Format: http://localhost:8001/chunk_abs_path
-            let url = `http://${HOST}:${CLIENT_PORT}/${chunk_abs_path}`
-            let option = {
-                headers: {'Content-Type': 'application/json'},
-            }
-
-            // FIXME: currently no response receiver
-            request.post(url, option, (err, res, body) => {
-                if (err)
-                    console.log("_process_request::request.post: Unexpected: " + err)
-            })
         })
 
         rows = await cursor.readAsync(CHUNK_ROWS)
@@ -96,25 +97,16 @@ const _process_request = async (req) => {
     cursor.close(() => {
         client.release()
     })
+
+    return block_idx
 }
 
-// ==================== HTTP CODE ====================
-
-// Usage:
-
-// curl http://localhost:8000/<sql_query>/<read_only: true / false>
-// will return a json file containing the song's audio feature
-
 const requestListener = async (req, res) => {
-    console.log("Get HTTP request: " + req.url)
-
     try {
-        // async process request
-        await _process_request(req)
+        let num_block = await _process_request(req)
 
         res.writeHead(200)
-        res.end()
-
+        res.end(num_block.toString())
     } catch (err) {
         console.log("requestListener::Unexpected!")
 
