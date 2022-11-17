@@ -1,4 +1,6 @@
 {
+  "name": "6830-backend",
+  "version": "0.0.1",
   "dependencies": {
     "pg": "^8.8.0",
     "pg-cursor": "^2.7.4",
