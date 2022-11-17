@@ -1,15 +1,13 @@
 const fs = require('fs');
 const path = require('path');
 const http = require('http');
-const { promisify } = require('util');
-const { Pool } = require('pg');
-const Cursor = require('pg-cursor');
+
 
 import {Query, GetPage} from './fetcher';
 
 // =========================== Global Constants ===========================
 
-export const CACHE_DIR = "./cache";
+
 
 const HOST = 'localhost';    // host that run the backend server
 const SERVER_PORT = 8000;    // the port to receive http request

@@ -1,9 +1,8 @@
 const fs = require('fs');
 const path = require('path');
-
-import { CACHE_DIR } from './server';
-
-const POOL = new Pool(CREDENTIAL);
+const { promisify } = require('util');
+const { Pool } = require('pg');
+const Cursor = require('pg-cursor');
 
 // This is necessary to implement block reading from psql
 Cursor.prototype.readAsync = promisify(Cursor.prototype.read);
@@ -15,14 +14,21 @@ const CREDENTIAL = {
     port: 5432
 };
 
+const CACHE_DIR = "./cache"
+
 const CHUNK_ROWS = 1000;     // number of rows in each file chunk
-export const CHUNK_EXT = ".json";   // each chunk is written as json
+const CHUNK_EXT = ".json";   // each chunk is written as json
+
+const POOL = new Pool(CREDENTIAL);
+
+const POLLING_INTERVAL = 1000   // in millisecond
+const MAX_RETRY_TIMES = 5
 
 /** 
  * Send a synchronous SQL query to Postgres, fetch the results in a 
  * streaming manner, asynchronously cache chunks in disk, return the
  * number of chunks cached otherwise -1. */
-export const Query = async (query_text, is_read) => {
+const Query = async (query_text, is_read) => {
     // process the query
     const client = await POOL.connect();     // a client per request
 
@@ -46,11 +52,11 @@ export const Query = async (query_text, is_read) => {
 
     const cursor = client.query(new Cursor(query_text, []));
 
-    let block_idx = 0;
+    let chunk_idx = 0;
     let rows = await cursor.readAsync(CHUNK_ROWS);
     while (rows.length) {
         // async write chunk to cache folder
-        const chunk_abs_path = path.resolve(path.join(query_cache_dir, block_idx.toString() + CHUNK_EXT));
+        const chunk_abs_path = path.resolve(path.join(query_cache_dir, chunk_idx.toString() + CHUNK_EXT));
         const json = JSON.stringify(rows);
 
         fs.writeFile(chunk_abs_path, json, 'utf8', (err) => {
@@ -60,38 +66,69 @@ export const Query = async (query_text, is_read) => {
         });
 
         rows = await cursor.readAsync(CHUNK_ROWS);
-        block_idx++;
+        chunk_idx++;
     }
 
     cursor.close(() => {
         client.release();
     })
 
-    return block_idx;
+    return chunk_idx;
 }
 
-export const GetPage = async (query_text, pgIdx) => {
-    console.log(`Fetching page ${pgIdx}`);
+const GetPage = async (query_text, pgIdx) => {
+    console.log(`Fetching page ${query_text}/${pgIdx}`);
 
-   /*  while (true) {
-        if (query in queryResult) {
-            pgIdx = pgIdx >= queryResult[query]? queryResult[query] : pgIdx;
-    
+    let query_cache_dir = path.join(CACHE_DIR, query_text);
+
+    if (!fs.existsSync(query_cache_dir)) {
+        // query haven't initiated
+        console.log("call Query")
+        Query(query_text, true);
+    }
+
+    let chunk_path = path.join(query_cache_dir, pgIdx + CHUNK_EXT);
+
+    // FIXME: currently use busy polling
+    let count = 0;
+    while (count < MAX_RETRY_TIMES) {
+        // console.log("ckpt")
+        if (fs.existsSync(chunk_path)) {
             try {
-                const data = readFileSync(`${DATA_DIR}${query}/${pgIdx}.json`, "utf-8");
+                const data = fs.readFileSync(chunk_path, 'utf-8');
                 return JSON.parse(data);
             } catch (err) {
                 throw err;
             }
-        } else if (existsSync(`${DATA_DIR}${query}/${pgIdx}.json`)) {
-            try {
-                const data = readFileSync(`${DATA_DIR}${query}/${pgIdx}.json`, "utf-8");
-                return JSON.parse(data);
-            } catch (err) {
-                throw err;
-            }
+        } else {
+            // query is still working
+            await _sleep(POLLING_INTERVAL);
         }
+        count++;
+    }
 
-        await sleep(POLLING_INTERVAL);
-    } */
+    return null;
 }
+
+function _sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+module.exports = {
+    CACHE_DIR: CACHE_DIR,
+    Query: Query,
+    GetPage: GetPage,
+}
+
+
+const main = async () => {
+    let num = 100;
+    let query_text = `SELECT * FROM scores WHERE sid < ${num}`;
+    let is_read = true;
+
+    // let block_num = await Query(query_text, is_read);
+    let ret = await GetPage(query_text, 1);
+
+    console.log(ret);
+
+}; main();
