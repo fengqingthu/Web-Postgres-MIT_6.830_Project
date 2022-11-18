@@ -25,7 +25,7 @@ const _init_directory = (dir) => {
  * Usage:
  * curl -X POST http://localhost:8000/api/read \
  * -H 'Content-Type: application/json' \
- * -d '{"query": SELECT * FROM ...}'
+ * -d '{"query": "SELECT * FROM ..."}'
  * Response: {"num_page": 5}
  * 
  * curl -X POST http://localhost:8000/api/update \
@@ -51,10 +51,9 @@ const requestListener = async (req, res) => {
     await req.on("data", function (data) {
         arr.push(data);
     });
-    var data = Buffer.concat(arr).toString(), ret;
+    var data = Buffer.concat(arr).toString();
     try {
-        var ret = JSON.parse(data);
-        req.body = ret;
+        req.body = JSON.parse(data);
     } catch (err) {
         res.writeHead(400);
         res.end();
@@ -68,17 +67,19 @@ const requestListener = async (req, res) => {
             case "read":
                 let num_page = await fetcher.Query(req.body.query, true);
                 res.end(JSON.stringify({ "num_page": num_page }));
-
+                return
             case "update":
                 await fetcher.Query(req.body.query, false);
                 res.end(JSON.stringify({ "num_page": -1 }));
-
+                return
             case "get-page":
                 const page = await fetcher.GetPage(req.body.query, req.body.page_index)
                 res.end(JSON.stringify({ "page_data": page }));
+                return
             default:
                 res.writeHead(404);
                 res.end();
+                return
         }
     } catch (err) {
         res.writeHead(500);

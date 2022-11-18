@@ -83,7 +83,6 @@ const GetPage = async (query_text, pgIdx) => {
 
     if (!fs.existsSync(query_cache_dir)) {
         // query haven't initiated
-        console.log("call Query")
         Query(query_text, true);
     }
 
@@ -92,7 +91,6 @@ const GetPage = async (query_text, pgIdx) => {
     // FIXME: currently use busy polling
     let count = 0;
     while (count < MAX_RETRY_TIMES) {
-        // console.log("ckpt")
         if (fs.existsSync(chunk_path)) {
             try {
                 const data = fs.readFileSync(chunk_path, 'utf-8');
@@ -119,16 +117,3 @@ module.exports = {
     Query: Query,
     GetPage: GetPage,
 }
-
-
-const main = async () => {
-    let num = 100;
-    let query_text = `SELECT * FROM scores WHERE sid < ${num}`;
-    let is_read = true;
-
-    // let block_num = await Query(query_text, is_read);
-    let ret = await GetPage(query_text, 1);
-
-    console.log(ret);
-
-}; main();
