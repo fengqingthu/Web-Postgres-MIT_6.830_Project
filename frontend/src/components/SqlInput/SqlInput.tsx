@@ -37,7 +37,7 @@ export const SqlInput: FunctionComponent<SqlProps>=(props)=>{
       
       setPageIndex(0);
       for (let i=1;i<=2;i++){
-        fetchData(i,props.query);
+        fetchData(i,sqlQuery);
       }
     }
     return <div className={classes.sqlInput}><input  className={classes.queryBox} ref={inputRef}  onChange={updateSqlQuery}/> <button className={classes.queryButton} onClick={sendSqlQuery}> Query </button></div>;
