@@ -1,6 +1,6 @@
-import React,{ComponentType, FunctionComponent,useEffect,useState,useRef, ChangeEvent, ReactNode} from 'react';
+import { FunctionComponent,useEffect,useState,useRef, ChangeEvent, ReactNode} from 'react';
 import classes from './Cell.module.css';
-import {atom,useRecoilState} from "recoil";
+import {useRecoilState} from "recoil";
 import {CellValueState} from "../../store/CellValueState"
 
 export const CELL_WIDTH=100;
@@ -9,6 +9,8 @@ export const CELL_HEIGHT=25;
 export type CellProps={
     children?: ReactNode | undefined;
     cellId: string;
+    inputId:string;
+
 };
 
 const Cell: FunctionComponent<CellProps>=(props)=>{
@@ -16,12 +18,15 @@ const Cell: FunctionComponent<CellProps>=(props)=>{
     const [isEditMode, setISEditMode]=useState(false);
     const inputRef=useRef(null);
 
-    const changeLabeltoInput=()=>setISEditMode(true);
+    const changeLabeltoInput=()=>{
+        console.log("cell id is",props.cellId);
+        setISEditMode(true);
+    }
 
     const changeInputtoLabel=()=>setISEditMode(false);
 
     const onClickOutsideInputHandler=(event: MouseEvent)=>{
-        if((event.target as HTMLInputElement)?.dataset?.cellId!==props.cellId){
+        if((event.target as HTMLInputElement)?.dataset?.inputId!==props.inputId){
             changeInputtoLabel();
         }
         
@@ -35,6 +40,6 @@ const Cell: FunctionComponent<CellProps>=(props)=>{
         return document.addEventListener("click", onClickOutsideInputHandler);
     },[])
 
-    return isEditMode? <input className={classes.CellInput} ref={inputRef} data-cell-id={props.cellId} onChange={updateCellValueState}/> : <div className={classes.CellLabel} data-cell-id={props.cellId} onClick={changeLabeltoInput}>{cellValue}</div>;
+    return isEditMode? <input className={classes.CellInput} ref={inputRef} data-input-id={props.inputId} onChange={updateCellValueState}/> : <div className={classes.CellLabel} data-input-id={props.inputId} onClick={changeLabeltoInput}>{cellValue}</div>;
 }
 export default Cell;

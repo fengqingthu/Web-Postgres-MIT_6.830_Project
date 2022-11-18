@@ -7,17 +7,63 @@ import classes from './Sheet.module.css';
 import {SheetSizeState} from "../../store/SheetSizeState";
 import AxisCell from '../AxisCell/AxisCell';
 import { numberToString } from '../../utils/horizontalAxisCov';
+import {useRecoilState,atom} from "recoil";
+import { PageIdxState } from '../../store/PageIdxState';
+import {CellValueState} from "../../store/CellValueState";
+import {memoize} from "../../utils/memoize";
 
-export type SheetProps={};
+export type SheetProps={
+};
+
+const createAtom=(newCellIdx:string)=>{
+    return atom({
+      key:`cell_${newCellIdx}`,
+      default:"",
+    })
+}
+
 
 const Sheet: FunctionComponent<SheetProps>=(props)=>{
     const sheetSize=useRecoilValue(SheetSizeState);
-
+    const [pageIndex,setPageIndex] = useRecoilState<number>(PageIdxState);
     const numberOfColumns=sheetSize.width/CELL_WIDTH;
     const numberOfRows=sheetSize.height/CELL_HEIGHT;
-    console.log(numberOfColumns,numberOfRows);
-    return (
+    // console.log(numberOfColumns,numberOfRows);
+    
+    const nextPage=(event: React.MouseEvent<HTMLButtonElement>)=>{
+      readPage(pageIndex);
+      setPageIndex(pageIndex+1);
+      
+    }
 
+
+    const previousPage=(event: React.MouseEvent<HTMLButtonElement>)=>{
+      setPageIndex(pageIndex-1);
+    }
+
+    const readPage=(page:number)=>{
+      for(let i=0;i<5;i++){
+        for(let j=0;j<5;j++){
+          const newCellId=`${pageIndex}, ${i}, ${j}`
+          memoize(newCellId,createAtom);
+        }
+      }
+      // const [cellValue,setCellValue] = useRecoilState<string>(CellValueState(`1, 1`));
+      // setCellValue("try");
+
+    }
+
+    readPage(pageIndex);
+    return (
+      <div className={classes.excelContainer}>
+        <div className={classes.sheetBar}>
+           <h3>Page: {pageIndex}</h3>
+           {/* <h6>page: {pageIndex}</h6> */}
+           <div>
+            <button onClick={previousPage} >previous</button>
+            <button onClick={nextPage} >next</button>
+           </div>
+        </div>
         <table className={classes.Grid}>
             <tbody>
               
@@ -28,10 +74,10 @@ const Sheet: FunctionComponent<SheetProps>=(props)=>{
               </Row>
                {[...Array(numberOfRows)].map((row, rowIndex)=>(
                  <Row key={rowIndex}>
-                    <AxisCell>{rowIndex}</AxisCell>
+                    <AxisCell key={rowIndex}>{pageIndex*1000+rowIndex}</AxisCell>
                     {[...Array(numberOfColumns)].map((column,columnIndex)=>(
                       <Column key={columnIndex}>
-                        <Cell cellId={`${rowIndex}, ${columnIndex}`}/>
+                        <Cell inputId={`${rowIndex}, ${columnIndex}`}  cellId={`${pageIndex}, ${rowIndex}, ${columnIndex}`}/>
                       </Column>
 
                     ))}
@@ -40,6 +86,8 @@ const Sheet: FunctionComponent<SheetProps>=(props)=>{
                ))}
             </tbody>
         </table>
+
+        </div>
 
     );
 }

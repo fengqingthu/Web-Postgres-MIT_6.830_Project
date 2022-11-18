@@ -1,5 +1,5 @@
 .AxisCell {
-    background-color: #DDD;
+    background-color: rgb(156, 156, 156);
     padding: 4px;
-    border: 1px solid #777;
+    border: 1px solid rgb(71, 71, 71);
 }

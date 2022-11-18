@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "recoil-nexus": "^0.4.0"
+  }
+}

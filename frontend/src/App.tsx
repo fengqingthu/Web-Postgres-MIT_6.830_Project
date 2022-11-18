@@ -1,5 +1,6 @@
 import {Interface } from './components/Interface/Interface';
 import { RecoilRoot } from 'recoil';
+import RecoilNexus from "recoil-nexus";
 import './App.css';
 import Cell from './components/Cell/Cell';
 import SheetContainer from './containers/SheetContainer';
@@ -7,6 +8,7 @@ import SheetContainer from './containers/SheetContainer';
 function App() {
   return (
     <RecoilRoot>
+      <RecoilNexus />
       <Interface></Interface>
         {/* <div className="contentContainer">
           <h3>Type SQL</h3>

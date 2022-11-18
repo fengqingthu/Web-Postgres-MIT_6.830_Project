@@ -17,7 +17,7 @@ export const ProcessQuery=(query: string):any =>{
 }
 
 //called when cannot find the tuple in memory, may want to reread the page into memory
-const getTuple=(tupleIdx:number, fieldIndex:number)=>{
+const getTuple=(tupleIdx:number, fieldIndex:number, query: string)=>{
 
 }
 
@@ -28,7 +28,7 @@ const fetchData=(page:number,query: string):any =>{
 }
 
 const cache=(json:JsonFile)=>{
-    //use the function memoize in "../utils/memoize" to cache the tuples
+    //use the function memoize in "../utils/memoize" to memoize the tuples
     //cell id would be `${tupleIndex},${fieldIndex}` or string(tupleIndex)+","+stirng(fieldIndex);
     //be consitent with tuple and field indexing
 
