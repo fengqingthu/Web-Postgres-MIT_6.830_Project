@@ -28,7 +28,11 @@ export const fetchFirstPage=(query:string)=>{
             body: JSON.stringify({ "page_index": 0, "query": query })
         })
     .then(response => response.json())
-    .then(response => setData(JSON.parse(JSON.stringify( response))["page_data"],0))     
+    .then(response =>{
+        console.log("started parsing page 0", new Date().getTime());
+        setData(JSON.parse(JSON.stringify( response))["page_data"],0);
+        console.log("finished parsing page 0", new Date().getTime());
+    } )     
 
 }
 
@@ -56,8 +60,12 @@ export const fetchData=(pageIdx:number, query:string)=>{
             body: JSON.stringify({ "page_index": pageIdx, "query": query })
         })
         .then(response => response.json())
-        .then(response => setData(JSON.parse(JSON.stringify( response))["page_data"],pageIdx))       
-       
+        .then(response => {
+            console.log("started parsing page",pageIdx, " ",new Date().getTime());
+            setData(JSON.parse(JSON.stringify( response))["page_data"],pageIdx);
+            console.log("finished parsing page ", pageIdx," ", new Date().getTime());
+        })       
+        
         // for(let i=0;i<10;i++){
         //     for(let j=0;j<2;j++){
         //     setCellValueState(pageIdx,i,j,"pageid: "+pageIdx.toString());
@@ -70,6 +78,7 @@ export const fetchData=(pageIdx:number, query:string)=>{
 }
 
 export const setData=(ObjArr:any,pageIdx:number)=>{
+    console.log("setData::started setting data",new Date().getTime());
     for(let i=0;i<ObjArr.length;i++){
         let cellId=0;
         for (let key in ObjArr[i]){
@@ -77,6 +86,7 @@ export const setData=(ObjArr:any,pageIdx:number)=>{
             cellId+=1;
         }
     }
+    console.log("setData::finished setting data", pageIdx," ",new Date().getTime());
 }
 
 
