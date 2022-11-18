@@ -41,7 +41,7 @@ export const Interface:FunctionComponent<InterfaceProps>=(props)=> {
 
           <div className={classes.contentContainer}>
             <h3>Type SQL</h3>
-            <SqlInput></SqlInput>
+            <SqlInput query={sqlQuery}></SqlInput>
             {/* <div className={classes.sqlInput}>
               <input  className={classes.queryBox} ref={inputRef}  onChange={updateSqlQuery}/> 
               <button className={classes.queryButton} onClick={sendSqlQuery}> Query </button>
