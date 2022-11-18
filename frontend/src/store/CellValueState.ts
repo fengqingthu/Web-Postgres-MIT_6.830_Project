@@ -18,7 +18,7 @@ export const CellValueState=(cellId:string,)=>memoize(cellId,(value:"")=>atom({
 
 
 export const fetchFirstPage=(query:string)=>{
-    
+    const timer=new Date();
     console.log("Fetching page 0")
         fetch('http://localhost:8000/api/get-page', {
             method: 'POST',
@@ -29,9 +29,9 @@ export const fetchFirstPage=(query:string)=>{
         })
     .then(response => response.json())
     .then(response =>{
-        console.log("started parsing page 0", new Date().getTime());
+        console.log("started parsing page 0", timer.getTime());
         setData(JSON.parse(JSON.stringify( response))["page_data"],0);
-        console.log("finished parsing page 0", new Date().getTime());
+        console.log("finished parsing page 0", timer.getTime());
     } )     
 
 }
@@ -49,6 +49,7 @@ export const sendQuery=(query:string)=>{
 }
 
 export const fetchData=(pageIdx:number, query:string)=>{
+    const timer = new Date();
     if (!checkHasPage(pageIdx)){
         //TODO:get jsondata here
         console.log("Fetching page", pageIdx)
@@ -61,9 +62,9 @@ export const fetchData=(pageIdx:number, query:string)=>{
         })
         .then(response => response.json())
         .then(response => {
-            console.log("started parsing page",pageIdx, " ",new Date().getTime());
+            console.log("started parsing page",pageIdx, " ",timer.getTime());
             setData(JSON.parse(JSON.stringify( response))["page_data"],pageIdx);
-            console.log("finished parsing page ", pageIdx," ", new Date().getTime());
+            console.log("finished parsing page ", pageIdx," ", timer.getTime());
         })       
         
         // for(let i=0;i<10;i++){
@@ -78,7 +79,8 @@ export const fetchData=(pageIdx:number, query:string)=>{
 }
 
 export const setData=(ObjArr:any,pageIdx:number)=>{
-    console.log("setData::started setting data",new Date().getTime());
+    const timer=new Date();
+    console.log("setData::started setting data",timer.getTime());
     for(let i=0;i<ObjArr.length;i++){
         let cellId=0;
         for (let key in ObjArr[i]){
@@ -86,7 +88,7 @@ export const setData=(ObjArr:any,pageIdx:number)=>{
             cellId+=1;
         }
     }
-    console.log("setData::finished setting data", pageIdx," ",new Date().getTime());
+    console.log("setData::finished setting data", pageIdx," ",timer.getTime());
 }
 
 
