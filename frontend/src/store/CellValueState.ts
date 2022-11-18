@@ -19,12 +19,11 @@ export const CellValueState=(cellId:string,)=>memoize(cellId,(value:"")=>atom({
 
 export const fetchFirstPage=()=>{
     
-    fetchData(0);
-    // for(let i=0;i<10;i++){
-    //     for(let j=0;j<2;j++){
-    //     setCellValueState(0,i,j,"pageid: 0");
-    //     }
-    // }
+    for(let i=0;i<10;i++){
+        for(let j=0;j<2;j++){
+        setCellValueState(0,i,j,"pageid: 0");
+        }
+    }
 }
 
 
