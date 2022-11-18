@@ -23,18 +23,18 @@ export const Interface:FunctionComponent<InterfaceProps>=(props)=> {
     const updateSqlQuery=(event: ChangeEvent<HTMLInputElement>)=>{
       setQuery(event.target.value);
     }
-    const sendSqlQuery=(event: React.MouseEvent<HTMLButtonElement>)=>{
-      //sending query and get page
-      console.log("sending query: ",sqlQuery);
+    // const sendSqlQuery=(event: React.MouseEvent<HTMLButtonElement>)=>{
+    //   //sending query and get page
+    //   console.log("sending query: ",sqlQuery);
 
 
-      // reading in data example
-      // clearAllPages();
-      fetchFirstPage();
-      for(let i=1;i<2;i++){
-          fetchData(i,sqlQuery);
-      }
-    }
+    //   // reading in data example
+    //   // clearAllPages();
+    //   fetchFirstPage();
+    //   for(let i=1;i<2;i++){
+    //       fetchData(i,sqlQuery);
+    //   }
+    // }
 
 
     return (

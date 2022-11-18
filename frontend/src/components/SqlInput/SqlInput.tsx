@@ -33,7 +33,7 @@ export const SqlInput: FunctionComponent<SqlProps>=(props)=>{
 
       
       clearAllPages();
-      fetchFirstPage();
+      fetchFirstPage(sqlQuery);
       
       setPageIndex(0);
       for (let i=1;i<=2;i++){
