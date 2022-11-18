@@ -1,7 +1,8 @@
 import React,{FunctionComponent,useState,useRef, ChangeEvent, ReactNode} from 'react';
 
 import classes from './SqlInput.module.css';
-import {memoize} from "../../utils/memoize";
+import {clearAllPages} from "../../utils/memoize";
+import { fetchData } from '../../store/CellValueState';
 import { atom } from 'recoil';
 
 export type SqlProps={
@@ -19,22 +20,14 @@ export const SqlInput: FunctionComponent<SqlProps>=(props)=>{
     const [sqlQuery,setQuery]=useState("");
     const inputRef=useRef(null);
     const updateSqlQuery=(event: ChangeEvent<HTMLInputElement>)=>{
-        setQuery(event.target.value);
+      setQuery(event.target.value);
     }
     const sendSqlQuery=(event: React.MouseEvent<HTMLButtonElement>)=>{
-        //sending query and get page
-        console.log("sending query: ",sqlQuery);
-
-
-        // reading in data
-        // clearMemory();
-        // for(let i=0;i<10;i++){
-        //     for(let j=0;j<2;j++){
-        //       const newCellId=`${0}, ${i}, ${j}`
-        //       updateMemoize(newCellId,createAtom);
-        //     }
-        // }
-
+      //sending query and get page
+      console.log("sending query: ",sqlQuery);
+      for (let i=0;i<=2;i++){
+        fetchData(i);
+      }
     }
     return <div className={classes.sqlInput}><input  className={classes.queryBox} ref={inputRef}  onChange={updateSqlQuery}/> <button className={classes.queryButton} onClick={sendSqlQuery}> Query </button></div>;
     

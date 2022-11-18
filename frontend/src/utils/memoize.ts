@@ -1,3 +1,4 @@
+import {resetRecoil} from "recoil-nexus";
 type MemorizedPage={
     [key:string]:any;
 }
@@ -39,11 +40,17 @@ const updateMemoize=(cellId: string,  atomFactory: any)=>{
 
 //clear pages that are not currently relevent 
 export const clearMemory=(page:number)=>{
-    delete memoizedPages[page];
+    for (let a in memoizedPages[page]){
+        resetRecoil(memoizedPages[page][a]);
+    }
 }
 
 export const clearAllPages=()=>{
     for( let key in memoizedPages){
         clearMemory(parseInt(key));
     }
+}
+
+export const checkHasPage=(pageIdx:number)=>{
+    return memoizedPages.hasOwnProperty(pageIdx);
 }

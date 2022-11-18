@@ -6,7 +6,7 @@ import {SqlInput} from "../SqlInput/SqlInput";
 import { atom } from 'recoil';
 import { getRecoil, setRecoil } from "recoil-nexus";
 import {clearAllPages, memoize} from "../../utils/memoize";
-import { CellValueState } from '../../store/CellValueState';
+import { CellValueState,setCellValueState } from '../../store/CellValueState';
 
 export type InterfaceProps={};
 
@@ -32,9 +32,7 @@ export const Interface:FunctionComponent<InterfaceProps>=(props)=> {
       clearAllPages();
       for(let i=0;i<10;i++){
           for(let j=0;j<2;j++){
-            const newCellId=`${0}, ${i}, ${j}`
-            const newAtom=CellValueState(newCellId);
-            setRecoil(newAtom,sqlQuery+ (i*10+j).toString());
+            setCellValueState(0,i,j,"demo");
           }
       }
     }
@@ -44,10 +42,11 @@ export const Interface:FunctionComponent<InterfaceProps>=(props)=> {
 
           <div className={classes.contentContainer}>
             <h3>Type SQL</h3>
-            <div className={classes.sqlInput}>
+            <SqlInput></SqlInput>
+            {/* <div className={classes.sqlInput}>
               <input  className={classes.queryBox} ref={inputRef}  onChange={updateSqlQuery}/> 
               <button className={classes.queryButton} onClick={sendSqlQuery}> Query </button>
-            </div>
+            </div> */}
             <Sheet ></Sheet>
 
           </div>

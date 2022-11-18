@@ -9,8 +9,8 @@ import AxisCell from '../AxisCell/AxisCell';
 import { numberToString } from '../../utils/horizontalAxisCov';
 import {useRecoilState,atom} from "recoil";
 import { PageIdxState } from '../../store/PageIdxState';
-import {CellValueState} from "../../store/CellValueState";
-import {memoize} from "../../utils/memoize";
+import {CellValueState, fetchData} from "../../store/CellValueState";
+import {checkHasPage} from "../../utils/memoize";
 
 export type SheetProps={
 };
@@ -31,9 +31,10 @@ const Sheet: FunctionComponent<SheetProps>=(props)=>{
     // console.log(numberOfColumns,numberOfRows);
     
     const nextPage=(event: React.MouseEvent<HTMLButtonElement>)=>{
-      readPage(pageIndex);
       setPageIndex(pageIndex+1);
-      
+      for (let i=Math.max(0,pageIndex-2);i<pageIndex+3;i++){
+        fetchData(i);
+      }
     }
 
 
@@ -41,19 +42,9 @@ const Sheet: FunctionComponent<SheetProps>=(props)=>{
       setPageIndex(pageIndex-1);
     }
 
-    const readPage=(page:number)=>{
-      for(let i=0;i<5;i++){
-        for(let j=0;j<5;j++){
-          const newCellId=`${pageIndex}, ${i}, ${j}`
-          memoize(newCellId,createAtom);
-        }
-      }
-      // const [cellValue,setCellValue] = useRecoilState<string>(CellValueState(`1, 1`));
-      // setCellValue("try");
+    
 
-    }
-
-    readPage(pageIndex);
+  
     return (
       <div className={classes.excelContainer}>
         <div className={classes.sheetBar}>
