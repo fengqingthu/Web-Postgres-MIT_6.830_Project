@@ -83,7 +83,7 @@ const GetPage = async (query_text, pgIdx) => {
 
     if (!fs.existsSync(query_cache_dir)) {
         // query haven't initiated
-        Query(query_text, true);
+        return null;
     }
 
     let chunk_path = path.join(query_cache_dir, pgIdx + CHUNK_EXT);
