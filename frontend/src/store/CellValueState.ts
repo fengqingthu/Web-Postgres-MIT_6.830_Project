@@ -29,7 +29,7 @@ export const fetchFirstPage=(query:string)=>{
         })
     .then(response => response.json())
     .then(response => setData(JSON.parse(response)["page_data"],0))     
-      
+
 }
 
 export const sendQuery=(query:string)=>{
@@ -71,9 +71,10 @@ export const fetchData=(pageIdx:number, query:string)=>{
 
 export const setData=(ObjArr:any,pageIdx:number)=>{
     for(let i=0;i<ObjArr.length;i++){
-        const cellId=0;
+        let cellId=0;
         for (let key in ObjArr[i]){
             setCellValueState(pageIdx,i,cellId,ObjArr[i][key]);
+            cellId+=1;
         }
     }
 }
