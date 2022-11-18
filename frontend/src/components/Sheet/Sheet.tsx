@@ -32,9 +32,11 @@ const Sheet: FunctionComponent<SheetProps>=(props)=>{
     
     const nextPage=(event: React.MouseEvent<HTMLButtonElement>)=>{
       setPageIndex(pageIndex+1);
-      for (let i=Math.max(0,pageIndex-2);i<pageIndex+3;i++){
+      // if (!checkHasPage(pageIndex)){
+      for (let i=Math.max(0,pageIndex-2);i<pageIndex+4;i++){
         fetchData(i);
       }
+      // }
     }
 
 

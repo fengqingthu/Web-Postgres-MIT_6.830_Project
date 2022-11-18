@@ -10,20 +10,29 @@ type MemoizedContent={
     [key:string]:any;
 }
 
+const cached=new Array<number>();
 const memoizedContent: MemoizedContent={};
 const memoizedPages: MemoizedPages={};
+export const add2cache=()=>{
+    
+}
 export const memoize=(cellId: string,  atomFactory: any)=>{
     const p=parseInt(cellId.split(",")[0]);
     if(!memoizedPages.hasOwnProperty(p)){
         memoizedPages[p]={};
     }
+    
+    if(!memoizedContent.hasOwnProperty(cellId)){
+        memoizedContent[cellId]=atomFactory(cellId);
+    }
     if(!memoizedPages[p].hasOwnProperty(cellId)){
-        memoizedPages[p][cellId]=atomFactory(cellId);
+        memoizedPages[p][cellId]=memoizedContent[cellId];
     }
     return memoizedPages[p][cellId];
     // if(!memoizedContent.hasOwnProperty(cellId)){
     //     // console.log("createAtom,",cellId)
     //     memoizedContent[cellId]=atomFactory(cellId);
+    // }
 
         
     // };
@@ -40,14 +49,21 @@ const updateMemoize=(cellId: string,  atomFactory: any)=>{
 
 //clear pages that are not currently relevent 
 export const clearMemory=(page:number)=>{
+    console.log("clearing page",page)
     for (let a in memoizedPages[page]){
         resetRecoil(memoizedPages[page][a]);
     }
+    delete memoizedPages[page];
 }
 
 export const clearAllPages=()=>{
     for( let key in memoizedPages){
-        clearMemory(parseInt(key));
+        if (parseInt(key)!==0){
+            clearMemory(parseInt(key));
+        }
+    }
+    while(cached.length > 0) {
+        cached.pop();
     }
 }
 

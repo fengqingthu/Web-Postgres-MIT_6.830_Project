@@ -2,8 +2,9 @@ import React,{FunctionComponent,useState,useRef, ChangeEvent, ReactNode} from 'r
 
 import classes from './SqlInput.module.css';
 import {clearAllPages} from "../../utils/memoize";
-import { fetchData } from '../../store/CellValueState';
-import { atom } from 'recoil';
+import { fetchData, fetchFirstPage } from '../../store/CellValueState';
+import { atom,useRecoilState } from 'recoil';
+import { PageIdxState } from '../../store/PageIdxState';
 
 export type SqlProps={
     children?: ReactNode | undefined;
@@ -18,14 +19,22 @@ const createAtom=(newCellIdx:string)=>{
 
 export const SqlInput: FunctionComponent<SqlProps>=(props)=>{
     const [sqlQuery,setQuery]=useState("");
+    const [pageIndex,setPageIndex] = useRecoilState<number>(PageIdxState);
     const inputRef=useRef(null);
     const updateSqlQuery=(event: ChangeEvent<HTMLInputElement>)=>{
       setQuery(event.target.value);
     }
     const sendSqlQuery=(event: React.MouseEvent<HTMLButtonElement>)=>{
-      //sending query and get page
+      //sending query and go to the first page
       console.log("sending query: ",sqlQuery);
-      for (let i=0;i<=2;i++){
+
+
+      
+      clearAllPages();
+      fetchFirstPage();
+      
+      setPageIndex(0);
+      for (let i=1;i<=2;i++){
         fetchData(i);
       }
     }
