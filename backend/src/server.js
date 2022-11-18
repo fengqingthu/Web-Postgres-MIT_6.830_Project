@@ -54,6 +54,7 @@ const requestListener = async (req, res) => {
     var data = Buffer.concat(arr).toString(), ret;
     try {
         var ret = JSON.parse(data);
+        req.body = ret;
     } catch (err) {
         res.writeHead(400);
         res.end();
@@ -65,15 +66,15 @@ const requestListener = async (req, res) => {
         res.writeHead(200, { "Content-Type": "application/json" });
         switch (segs[1]) {
             case "read":
-                let num_page = await fetcher.Query(ret.query, true);
+                let num_page = await fetcher.Query(req.body.query, true);
                 res.end(JSON.stringify({ "num_page": num_page }));
 
             case "update":
-                await fetcher.Query(ret.query, false);
+                await fetcher.Query(req.body.query, false);
                 res.end(JSON.stringify({ "num_page": -1 }));
 
             case "get-page":
-                const page = await fetcher.GetPage(ret.query, ret.page_index)
+                const page = await fetcher.GetPage(req.body.query, req.body.page_index)
                 res.end(JSON.stringify({ "page_data": page }));
             default:
                 res.writeHead(404);
