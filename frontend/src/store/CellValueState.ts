@@ -18,13 +18,16 @@ export const CellValueState=(cellId:string,)=>memoize(cellId,(value:"")=>atom({
 
 
 export const fetchFirstPage=()=>{
-
-    for(let i=0;i<10;i++){
-        for(let j=0;j<2;j++){
-        setCellValueState(0,i,j,"pageid: 0");
-        }
-    }
+    
+    fetchData(0);
+    // for(let i=0;i<10;i++){
+    //     for(let j=0;j<2;j++){
+    //     setCellValueState(0,i,j,"pageid: 0");
+    //     }
+    // }
 }
+
+
 export const fetchData=(pageIdx:number)=>{
     if (!checkHasPage(pageIdx)){
         //TODO:get jsondata here
