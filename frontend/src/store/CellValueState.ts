@@ -26,11 +26,31 @@ export const fetchFirstPage=()=>{
     }
 }
 
+export const sendQuery=(query:string)=>{
+    fetch('http://localhost:8000/api/read', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ "query": query })
+    })
+    .then(response => response.json())
+    .then(response => console.log(JSON.stringify(response)))
+}
 
 export const fetchData=(pageIdx:number)=>{
     if (!checkHasPage(pageIdx)){
         //TODO:get jsondata here
         console.log("Fetching page", pageIdx)
+        fetch('http://localhost:8000/api/get-page', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ "page_index": pageIdx })
+        })
+        .then(response => response.json())
+        .then(response => console.log(JSON.stringify(response)))       
         for(let i=0;i<10;i++){
             for(let j=0;j<2;j++){
             setCellValueState(pageIdx,i,j,"pageid: "+pageIdx.toString());

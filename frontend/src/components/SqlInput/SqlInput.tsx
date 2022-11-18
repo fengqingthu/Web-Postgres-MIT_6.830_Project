@@ -2,7 +2,7 @@ import React,{FunctionComponent,useState,useRef, ChangeEvent, ReactNode} from 'r
 
 import classes from './SqlInput.module.css';
 import {clearAllPages} from "../../utils/memoize";
-import { fetchData, fetchFirstPage } from '../../store/CellValueState';
+import { fetchData, fetchFirstPage, sendQuery } from '../../store/CellValueState';
 import { atom,useRecoilState } from 'recoil';
 import { PageIdxState } from '../../store/PageIdxState';
 
@@ -27,6 +27,7 @@ export const SqlInput: FunctionComponent<SqlProps>=(props)=>{
     const sendSqlQuery=(event: React.MouseEvent<HTMLButtonElement>)=>{
       //sending query and go to the first page
       console.log("sending query: ",sqlQuery);
+      sendQuery(sqlQuery);
 
 
       
