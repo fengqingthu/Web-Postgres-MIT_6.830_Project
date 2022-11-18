@@ -28,7 +28,7 @@ export const fetchFirstPage=(query:string)=>{
             body: JSON.stringify({ "page_index": 0, "query": query })
         })
     .then(response => response.json())
-    .then(response => setData(JSON.parse(response)["page_data"],0))     
+    .then(response => setData(JSON.parse(JSON.stringify( response))["page_data"],0))     
 
 }
 
@@ -56,7 +56,7 @@ export const fetchData=(pageIdx:number, query:string)=>{
             body: JSON.stringify({ "page_index": pageIdx, "query": query })
         })
         .then(response => response.json())
-        .then(response => setData(JSON.parse(response)["page_data"],pageIdx))       
+        .then(response => setData(JSON.parse(JSON.stringify( response))["page_data"],pageIdx))       
        
         // for(let i=0;i<10;i++){
         //     for(let j=0;j<2;j++){
