@@ -13,6 +13,7 @@ import {CellValueState, fetchData} from "../../store/CellValueState";
 import {checkHasPage} from "../../utils/memoize";
 
 export type SheetProps={
+  query: string;
 };
 
 const createAtom=(newCellIdx:string)=>{
@@ -34,7 +35,7 @@ const Sheet: FunctionComponent<SheetProps>=(props)=>{
       setPageIndex(pageIndex+1);
       // if (!checkHasPage(pageIndex)){
       for (let i=Math.max(0,pageIndex-2);i<pageIndex+4;i++){
-        fetchData(i);
+        fetchData(i,props.query);
       }
       // }
     }

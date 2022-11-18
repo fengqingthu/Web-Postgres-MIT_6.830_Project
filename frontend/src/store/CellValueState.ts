@@ -38,7 +38,7 @@ export const sendQuery=(query:string)=>{
     .then(response => console.log(JSON.stringify(response)))
 }
 
-export const fetchData=(pageIdx:number)=>{
+export const fetchData=(pageIdx:number, query:string)=>{
     if (!checkHasPage(pageIdx)){
         //TODO:get jsondata here
         console.log("Fetching page", pageIdx)
@@ -47,7 +47,7 @@ export const fetchData=(pageIdx:number)=>{
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ "page_index": pageIdx })
+            body: JSON.stringify({ "page_index": pageIdx, "query": query })
         })
         .then(response => response.json())
         .then(response => console.log(JSON.stringify(response)))       

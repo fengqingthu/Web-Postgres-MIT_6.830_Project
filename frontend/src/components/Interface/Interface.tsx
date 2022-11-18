@@ -6,7 +6,7 @@ import {SqlInput} from "../SqlInput/SqlInput";
 import { atom } from 'recoil';
 import { getRecoil, setRecoil } from "recoil-nexus";
 import {clearAllPages, memoize} from "../../utils/memoize";
-import { CellValueState,setCellValueState } from '../../store/CellValueState';
+import { CellValueState,fetchData,fetchFirstPage,setCellValueState } from '../../store/CellValueState';
 
 export type InterfaceProps={};
 
@@ -29,11 +29,10 @@ export const Interface:FunctionComponent<InterfaceProps>=(props)=> {
 
 
       // reading in data example
-      clearAllPages();
-      for(let i=0;i<10;i++){
-          for(let j=0;j<2;j++){
-            setCellValueState(0,i,j,"demo");
-          }
+      // clearAllPages();
+      fetchFirstPage();
+      for(let i=1;i<2;i++){
+          fetchData(i,sqlQuery);
       }
     }
 
@@ -47,7 +46,7 @@ export const Interface:FunctionComponent<InterfaceProps>=(props)=> {
               <input  className={classes.queryBox} ref={inputRef}  onChange={updateSqlQuery}/> 
               <button className={classes.queryButton} onClick={sendSqlQuery}> Query </button>
             </div> */}
-            <Sheet ></Sheet>
+            <Sheet query={sqlQuery}></Sheet>
 
           </div>
     );
