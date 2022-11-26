@@ -67,19 +67,19 @@ const requestListener = async (req, res) => {
             case "read":
                 let num_page = await fetcher.Query(req.body.query, true);
                 res.end(JSON.stringify({ "num_page": num_page }));
-                return
+                return;
             case "update":
                 await fetcher.Query(req.body.query, false);
                 res.end(JSON.stringify({ "num_page": -1 }));
-                return
+                return;
             case "get-page":
-                const page = await fetcher.GetPage(req.body.query, req.body.page_index)
+                const page = await fetcher.GetPage(req.body.query, req.body.page_index);
                 res.end(JSON.stringify({ "page_data": page }));
-                return
+                return;
             default:
                 res.writeHead(404);
                 res.end();
-                return
+                return;
         }
     } catch (err) {
         res.writeHead(500);
