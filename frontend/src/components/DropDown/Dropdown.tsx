@@ -12,7 +12,7 @@ const Dropdown: FunctionComponent<DropdownProps>=(props)=>{
     return (
         <div className={classes.dropdown}>
             {props.options.map((option)=>
-                <DropdownOption columnIdx={props.columnIdx} option={option}></DropdownOption>
+                <DropdownOption key={option+props.columnIdx} columnIdx={props.columnIdx} option={option}></DropdownOption>
             ) 
             }
         </div>

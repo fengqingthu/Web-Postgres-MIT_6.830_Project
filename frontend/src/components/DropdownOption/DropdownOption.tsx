@@ -18,7 +18,8 @@ const DropdownOption: FunctionComponent<DropdownOptionProps>=(props)=>{
     const [pageIndex,setPageIndex] = useRecoilState<number>(PageIdxState);
 
     // hooks and functions for filter
-    const [filterFunc, setFilterFunc] = useState("filter");
+    const [filterFunc, setFilterFunc] = useState(" ");
+    let newFilter="";
     const [isInput, setIsInput]=useState(false);
     const inputRef=useRef(null);
     const changeLabeltoInput=()=>{
@@ -26,15 +27,20 @@ const DropdownOption: FunctionComponent<DropdownOptionProps>=(props)=>{
     }
     const changeInputtoLabel=()=>setIsInput(false);
     const updateFilterFunc=(event: ChangeEvent<HTMLInputElement>)=>{
-        setFilterFunc(event.target.value);
-        console.log("new filter",event.target.value);
+        if (event.target.value[event.target.value.length-1]===";"){
+           sendFilter(event.target.value);
+           return 
+        }
+        newFilter=(" "+event.target.value).slice(1);
+        setFilterFunc((" "+event.target.value).slice(1));
     }
 
     const onClickOutsideInputHandler=(event: MouseEvent)=>{
-        if((event.target as HTMLInputElement)?.dataset?.inputId!=="filter"){
-            // console.log("onclickoutside",event.target)
+        if((event.target as HTMLInputElement)?.dataset?.inputId!=="filter" && isInput){
+            // sendFilter();
+            console.log("onclickoutside",event.target)
             changeInputtoLabel();
-            sendFilter();
+            
         }
         
     };
@@ -54,15 +60,16 @@ const DropdownOption: FunctionComponent<DropdownOptionProps>=(props)=>{
     }
 
     const sendSortDesc=()=>{
+        console.log("prop option is"+props.option);
         console.log("before sorting, current query is"+currQuery);
         console.log("columnIdx is",props.columnIdx);
         // const newQuery=currQuery;
         // sendSqlQuery(newQuery);
     }
 
-    const sendFilter=()=>{
-        console.log("before sorting, current query is"+currQuery);
-        console.log("curr filter is"+filterFunc);
+    const sendFilter=(newFilter:string)=>{
+        console.log("prop option is"+props.option);
+        console.log("curr filter is",newFilter);
         console.log("columnIdx is",props.columnIdx);
         // const newQuery=currQuery;
         // sendSqlQuery(newQuery);
@@ -87,7 +94,7 @@ const DropdownOption: FunctionComponent<DropdownOptionProps>=(props)=>{
 
     if (props.option==="filter"){
         return (
-            isInput? <input data-input-id={props.option} className={classes.FilterInput} ref={inputRef} onChange={updateFilterFunc}></input>: <div data-input-id={props.option} className={classes.DropdownOption} onClick={changeLabeltoInput}>{props.option}</div>
+            isInput? <input data-input-id={props.option} className={classes.FilterInput} ref={inputRef} onChange={updateFilterFunc}></input>: <div data-input-id={props.option} className={classes.DropdownOption} onClick={changeLabeltoInput}>{filterFunc!==" "?filterFunc:props.option}</div>
         );   
     }
     if (props.option==="sort:asc"){
