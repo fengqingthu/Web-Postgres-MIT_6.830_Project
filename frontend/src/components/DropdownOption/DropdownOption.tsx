@@ -1,10 +1,20 @@
-import React, {FunctionComponent, ReactNode, useState, ChangeEvent, useRef, useEffect} from "react";
-import {  fetchData, fetchFirstPage, sendQuery } from "../../store/CellValueState";
-import { clearAllPages } from "../../utils/memoize";
-import Dropdown from "../DropDown/Dropdown";
+import React, {
+    ChangeEvent,
+    FunctionComponent,
+    ReactNode,
+    useEffect,
+    useRef,
+    useState
+} from "react";
+import {
+    fetchData,
+    fetchFirstPage,
+    sendQuery
+} from "../../store/CellValueState";
+import {clearAllPages} from "../../utils/memoize";
 import classes from "./DropdownOption.module.css";
-import { atom,useRecoilState } from 'recoil';
-import { PageIdxState } from '../../store/PageIdxState';
+import {useRecoilState} from 'recoil';
+import {PageIdxState} from '../../store/PageIdxState';
 import {QueryState} from '../../store/QueryState';
 
 export type DropdownOptionProps={
@@ -134,6 +144,33 @@ const DropdownOption: FunctionComponent<DropdownOptionProps>=(props)=>{
         newQuery = newQuery + " " + orderClause;
 
         sendSqlQuery(newQuery);
+    }
+
+    const _aggHelper=(currQuery:string, type:string, props:DropdownOptionProps)=>{
+        let find = currQuery.indexOf("*");
+
+        let colName = idx2Name.get(props.columnIdx);
+
+        let rightPart = currQuery.slice(find + 1).trim();
+        let leftPart = currQuery.slice(0, find).trim();
+
+        return leftPart + ` ${type}(${colName}) ` + rightPart;
+    }
+
+    const sendMax=()=>{
+        sendSqlQuery(_aggHelper(currQuery, "MAX", props));
+    }
+
+    const sendMin=()=>{
+        sendSqlQuery(_aggHelper(currQuery, "MIN", props));
+    }
+
+    const sendAvg=()=>{
+        sendSqlQuery(_aggHelper(currQuery, "AVG", props));
+    }
+
+    const sendCount=()=>{
+        sendSqlQuery(_aggHelper(currQuery, "COUNT", props));
     }
 
     // function for fetch pages / get data 
