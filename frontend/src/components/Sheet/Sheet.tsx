@@ -68,7 +68,7 @@ const Sheet: FunctionComponent<SheetProps>=(props)=>{
               </Row>
                {[...Array(numberOfRows)].map((row, rowIndex)=>(
                  <Row key={rowIndex}>
-                    <AxisCell key={rowIndex}>{pageIndex*1000+rowIndex}</AxisCell>
+                    <AxisCell key={rowIndex}>{pageIndex*100+rowIndex}</AxisCell>
                     {[...Array(numberOfColumns)].map((column,columnIndex)=>(
                       <Column key={columnIndex}>
                         <Cell inputId={`${rowIndex}, ${columnIndex}`}  cellId={`${pageIndex}, ${rowIndex}, ${columnIndex}`}/>
