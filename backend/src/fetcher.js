@@ -53,8 +53,14 @@ const Query = async (query_text, is_read) => {
 
     const cursor = client.query(new Cursor(query_text, []));
 
+    let startTime = Date.now()
+
     let chunk_idx = 0;
     let rows = await cursor.readAsync(CHUNK_ROWS);
+
+    let queryFirstChunkTime = Date.now() - startTime;
+    console.log("[Query] Query first chunk time:", queryFirstChunkTime.toString(), "ms")
+
     while (rows.length) {
         // async write chunk to cache folder
         const chunk_abs_path = path.resolve(path.join(query_cache_dir, chunk_idx.toString() + CHUNK_EXT));
@@ -68,17 +74,25 @@ const Query = async (query_text, is_read) => {
 
         rows = await cursor.readAsync(CHUNK_ROWS);
         chunk_idx++;
+
+        if (chunk_idx === 1) {
+            let firstChunkTime = Date.now() - startTime;
+            console.log("[Query] Cache first chunk time:", firstChunkTime.toString(), "ms")
+        }
     }
 
     cursor.close(() => {
         client.release();
     })
 
+    let allChunksTime = Date.now() - startTime;
+    console.log("[Query] Cache all chunks time:", allChunksTime.toString(), "ms")
+
     return chunk_idx;
 }
 
 const GetPage = async (query_text, pgIdx) => {
-    console.log(`Fetching page ${query_text}/${pgIdx}`);
+    console.log(`[GetPage] Fetching page ${query_text}/${pgIdx}`);
 
     let query_cache_dir = path.join(CACHE_DIR, query_text);
 

@@ -1,10 +1,20 @@
-import React, {FunctionComponent, ReactNode, useState, ChangeEvent, useRef, useEffect} from "react";
-import {  fetchData, fetchFirstPage, sendQuery } from "../../store/CellValueState";
-import { clearAllPages } from "../../utils/memoize";
-import Dropdown from "../DropDown/Dropdown";
+import React, {
+    ChangeEvent,
+    FunctionComponent,
+    ReactNode,
+    useEffect,
+    useRef,
+    useState
+} from "react";
+import {
+    fetchData,
+    fetchFirstPage,
+    sendQuery
+} from "../../store/CellValueState";
+import {clearAllPages} from "../../utils/memoize";
 import classes from "./DropdownOption.module.css";
-import { atom,useRecoilState } from 'recoil';
-import { PageIdxState } from '../../store/PageIdxState';
+import {useRecoilState} from 'recoil';
+import {PageIdxState} from '../../store/PageIdxState';
 import {QueryState} from '../../store/QueryState';
 
 export type DropdownOptionProps={
@@ -12,6 +22,15 @@ export type DropdownOptionProps={
     option: string;
     columnIdx:number;
 };
+
+let idx2Name = new Map<number, string>([
+    [1, "sid"],
+    [2, "math"],
+    [3, "phys"],
+    [4, "chem"],
+    [5, "bio"],
+])
+
  
 const DropdownOption: FunctionComponent<DropdownOptionProps>=(props)=>{
     const [currQuery,setCurrQuery] = useRecoilState<string>(QueryState);
@@ -57,6 +76,18 @@ const DropdownOption: FunctionComponent<DropdownOptionProps>=(props)=>{
         console.log("columnIdx is",props.columnIdx);
         // const newQuery=currQuery;
         // sendSqlQuery(newQuery);
+
+        let find = currQuery.indexOf("ORDER");
+        let newQuery;
+        if (find == -1) {
+            newQuery = currQuery;
+        } else {
+            newQuery = currQuery.slice(0, find).trim();
+        }
+
+        newQuery = newQuery + " ORDER BY " + idx2Name.get(props.columnIdx);
+
+        sendSqlQuery(newQuery);
     }
 
     const sendSortDesc=()=>{
@@ -65,6 +96,18 @@ const DropdownOption: FunctionComponent<DropdownOptionProps>=(props)=>{
         console.log("columnIdx is",props.columnIdx);
         // const newQuery=currQuery;
         // sendSqlQuery(newQuery);
+
+        let find = currQuery.indexOf("ORDER");
+        let newQuery;
+        if (find == -1) {
+            newQuery = currQuery;
+        } else {
+            newQuery = currQuery.slice(0, find).trim();
+        }
+
+        newQuery = newQuery + " ORDER BY " + idx2Name.get(props.columnIdx);
+
+        sendSqlQuery(newQuery);
     }
 
     const sendFilter=(newFilter:string)=>{
@@ -73,6 +116,61 @@ const DropdownOption: FunctionComponent<DropdownOptionProps>=(props)=>{
         console.log("columnIdx is",props.columnIdx);
         // const newQuery=currQuery;
         // sendSqlQuery(newQuery);
+
+        // FIXME: trim trailing ;
+        newFilter = newFilter.slice(0, newFilter.indexOf(";"));
+
+        let newQuery = currQuery;
+
+        // find if there is ORDER BY clause
+        let findOrder = currQuery.indexOf("ORDER");
+        let orderClause = "";
+        if (findOrder != -1) {
+            // take the ORDER BY clause out
+            orderClause = currQuery.slice(findOrder);
+            newQuery = currQuery.slice(0, findOrder).trim();
+        }
+
+        // find if there is WHERE in currQuery
+        let find = newQuery.indexOf("WHERE")
+        if (find == -1) {
+            // There is no WHERE
+            newQuery = newQuery + " WHERE " + newFilter;
+        } else {
+            // There is WHERE
+            newQuery = newQuery + " AND " + newFilter;
+        }
+
+        newQuery = newQuery + " " + orderClause;
+
+        sendSqlQuery(newQuery);
+    }
+
+    const _aggHelper=(currQuery:string, type:string, props:DropdownOptionProps)=>{
+        let find = currQuery.indexOf("*");
+
+        let colName = idx2Name.get(props.columnIdx);
+
+        let rightPart = currQuery.slice(find + 1).trim();
+        let leftPart = currQuery.slice(0, find).trim();
+
+        return leftPart + ` ${type}(${colName}) ` + rightPart;
+    }
+
+    const sendMax=()=>{
+        sendSqlQuery(_aggHelper(currQuery, "MAX", props));
+    }
+
+    const sendMin=()=>{
+        sendSqlQuery(_aggHelper(currQuery, "MIN", props));
+    }
+
+    const sendAvg=()=>{
+        sendSqlQuery(_aggHelper(currQuery, "AVG", props));
+    }
+
+    const sendCount=()=>{
+        sendSqlQuery(_aggHelper(currQuery, "COUNT", props));
     }
 
     // function for fetch pages / get data 
