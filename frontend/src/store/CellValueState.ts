@@ -1,6 +1,8 @@
 import {atom} from "recoil";
 import {memoize, checkHasPage} from "../utils/memoize"
 import {setRecoil } from "recoil-nexus";
+import {wrap} from "comlink";
+import type {CellWorker} from "../workers/worker";
 
 
 export const setCellValueState=(pageIdx:number, rowIdx:number, colIdx:number,value: string)=>{
@@ -81,6 +83,10 @@ export const fetchData=(pageIdx:number, query:string)=>{
 export const setData=(ObjArr:any,pageIdx:number)=>{
     const timer=new Date();
     console.log("setData::started setting data",timer.getTime());
+    // const worker = new Worker(new URL('../workers/worker.ts', import.meta.url));
+    // const service=wrap<CellWorker>(worker);
+    // service.work(ObjArr,pageIdx,setCellValueState);
+    // console.log("created worker");
     for(let i=0;i<ObjArr.length;i++){
         let cellId=0;
         for (let key in ObjArr[i]){
@@ -89,6 +95,4 @@ export const setData=(ObjArr:any,pageIdx:number)=>{
         }
     }
     console.log("setData::finished setting data", pageIdx," ",timer.getTime());
-}
-
-
+};

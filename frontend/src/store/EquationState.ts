@@ -1,1 +1,0 @@
-export const EquationState=1;

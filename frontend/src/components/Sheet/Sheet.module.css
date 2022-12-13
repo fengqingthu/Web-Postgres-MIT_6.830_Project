@@ -16,12 +16,17 @@
 
 margin-top:20px;
 overflow: scroll;
-/* border: 2px solid rgb(0, 0, 0); */
-
-/* justify-content: center; */
 }
 
 button{
     width:80px;
     margin-left:5px;
+}
+
+.SheetBody:hover {
+    cursor:cell;
+}
+
+tbody:hover {
+    cursor: cell;
 }

@@ -9,6 +9,7 @@ import AxisCell from '../AxisCell/AxisCell';
 import { numberToString } from '../../utils/horizontalAxisCov';
 import {useRecoilState,atom} from "recoil";
 import { PageIdxState } from '../../store/PageIdxState';
+import AxisCellWithDropdown from '../AxisCellWithDropdown/AxisCellWithDropdown';
 import {CellValueState, fetchData} from "../../store/CellValueState";
 import {checkHasPage} from "../../utils/memoize";
 
@@ -29,6 +30,7 @@ const Sheet: FunctionComponent<SheetProps>=(props)=>{
     const [pageIndex,setPageIndex] = useRecoilState<number>(PageIdxState);
     const numberOfColumns=sheetSize.width/CELL_WIDTH;
     const numberOfRows=sheetSize.height/CELL_HEIGHT;
+    const dropdwonOptions: string[]=["filter","sort:desc","sort:asc"];
     // console.log(numberOfColumns,numberOfRows);
     
     const nextPage=(event: React.MouseEvent<HTMLButtonElement>)=>{
@@ -40,14 +42,10 @@ const Sheet: FunctionComponent<SheetProps>=(props)=>{
       // }
     }
 
-
     const previousPage=(event: React.MouseEvent<HTMLButtonElement>)=>{
       setPageIndex(pageIndex-1);
     }
 
-    
-
-  
     return (
       <div className={classes.excelContainer}>
         <div className={classes.sheetBar}>
@@ -63,7 +61,7 @@ const Sheet: FunctionComponent<SheetProps>=(props)=>{
               
               <Row>
                 {[...Array(numberOfColumns+1)].map((column,columnIndex)=>
-                  columnIndex!==0?<AxisCell>{numberToString(columnIndex)}</AxisCell>:<AxisCell/>
+                  columnIndex!==0?<AxisCellWithDropdown options={dropdwonOptions} columnIdx={columnIndex}>{numberToString(columnIndex)}</AxisCellWithDropdown>:<AxisCell/>
                 )}
               </Row>
                {[...Array(numberOfRows)].map((row, rowIndex)=>(
@@ -76,7 +74,6 @@ const Sheet: FunctionComponent<SheetProps>=(props)=>{
 
                     ))}
                  </Row>
-
                ))}
             </tbody>
         </table>

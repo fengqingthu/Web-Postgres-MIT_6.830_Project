@@ -11,6 +11,7 @@ const CREDENTIAL = {
     user: "postgres",
     host: "localhost",
     database: "postgres",
+    password:"juduo971209",
     port: 5432
 };
 

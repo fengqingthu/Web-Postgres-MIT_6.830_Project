@@ -5,6 +5,7 @@ import {clearAllPages} from "../../utils/memoize";
 import { fetchData, fetchFirstPage, sendQuery } from '../../store/CellValueState';
 import { atom,useRecoilState } from 'recoil';
 import { PageIdxState } from '../../store/PageIdxState';
+import {QueryState} from '../../store/QueryState';
 
 export type SqlProps={
     children?: ReactNode | undefined;
@@ -21,6 +22,7 @@ const createAtom=(newCellIdx:string)=>{
 export const SqlInput: FunctionComponent<SqlProps>=(props)=>{
     const [sqlQuery,setQuery]=useState("");
     const [pageIndex,setPageIndex] = useRecoilState<number>(PageIdxState);
+    const [currQuery,setCurrQuery] = useRecoilState<string>(QueryState);
     const inputRef=useRef(null);
     const updateSqlQuery=(event: ChangeEvent<HTMLInputElement>)=>{
       setQuery(event.target.value);
@@ -29,9 +31,8 @@ export const SqlInput: FunctionComponent<SqlProps>=(props)=>{
       //sending query and go to the first page
       console.log("sending query: ",sqlQuery);
       sendQuery(sqlQuery);
+      setCurrQuery(sqlQuery);
 
-
-      
       clearAllPages();
       fetchFirstPage(sqlQuery);
       
