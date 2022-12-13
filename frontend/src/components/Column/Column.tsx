@@ -19,7 +19,7 @@ const Column: FunctionComponent<ColumnProps>=(props)=>{
 
     useEffect(() => {
         if(srow<=row && erow>=row && scol<=col && ecol>=col){
-            console.log("selecting cell: erow",erow,"srow",srow,"cellrow",row);
+            // console.log("selecting cell: erow",erow,"srow",srow,"cellrow",row);
             setState(true);
         }else{
             setState(false);

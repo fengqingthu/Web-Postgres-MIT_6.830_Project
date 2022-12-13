@@ -24,7 +24,7 @@ export const SqlInput: FunctionComponent<SqlProps>=(props)=>{
     const [pageIndex,setPageIndex] = useRecoilState<number>(PageIdxState);
     const [currQuery,setCurrQuery] = useRecoilState<string>(QueryState);
     const inputRef=useRef(null);
-    const updateSqlQuery=(event: ChangeEvent<HTMLInputElement>)=>{
+    const updateSqlQuery=(event: ChangeEvent<HTMLTextAreaElement>)=>{
       setQuery(event.target.value);
     }
     const sendSqlQuery=(event: React.MouseEvent<HTMLButtonElement>)=>{
@@ -41,7 +41,10 @@ export const SqlInput: FunctionComponent<SqlProps>=(props)=>{
         fetchData(i,sqlQuery);
       }
     }
-    return <div className={classes.sqlInput}><input  className={classes.queryBox} ref={inputRef}  onChange={updateSqlQuery}/> <button className={classes.queryButton} onClick={sendSqlQuery}> Query </button></div>;
+    return <div className={classes.sqlInput}>
+      <textarea rows={10} className={classes.queryBox} ref={inputRef}  onChange={updateSqlQuery} >{currQuery}</textarea>
+      <button className={classes.queryButton} onClick={sendSqlQuery}> Query </button>
+      </div>;
     
 }
 // export default SqlInput;

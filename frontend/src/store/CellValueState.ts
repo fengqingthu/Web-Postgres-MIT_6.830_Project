@@ -1,8 +1,10 @@
 import {atom} from "recoil";
 import {memoize, checkHasPage} from "../utils/memoize"
-import {setRecoil } from "recoil-nexus";
+import {setRecoil, getRecoil } from "recoil-nexus";
+
 import {wrap} from "comlink";
 import type {CellWorker} from "../workers/worker";
+import internal from "stream";
 
 
 export const setCellValueState=(pageIdx:number, rowIdx:number, colIdx:number,value: string)=>{
@@ -17,7 +19,33 @@ export const CellValueState=(cellId:string,)=>memoize(cellId,(value:"")=>atom({
     default:"",
 })
 );
-
+export const CalAggregates=(srow:number, erow:number, scol:number, ecol:number, pid:number):{[op:string]:number}=>{
+    let min=Number.POSITIVE_INFINITY;
+    let max=Number.NEGATIVE_INFINITY;
+    let sum=0;
+    let count=0;
+    // console.log("started cal aggregates",srow,erow,scol,ecol,pid);
+    for (let r=srow; r<=erow; r++){
+        for (let c=scol; c<=ecol; c++){
+            const cid=`${pid}, ${r}, ${c}`
+            const cellValueAtom=CellValueState(cid);
+            
+            const cellValue=parseInt(getRecoil(cellValueAtom));
+            sum+=cellValue;
+            count+=1;
+            min=Math.min(min,cellValue);
+            max=Math.max(max,cellValue);      
+        }
+    }
+    let dict:{[op:string]:number}={};
+    dict["sum"]=sum;
+    dict["avg"]=sum/count;
+    dict["max"]=max;
+    dict["min"]=min;
+    dict["count"]=count;
+    console.log(dict);
+    return dict;
+}
 
 export const fetchFirstPage=(query:string)=>{
     const timer=new Date();

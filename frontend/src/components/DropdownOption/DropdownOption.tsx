@@ -198,7 +198,27 @@ const DropdownOption: FunctionComponent<DropdownOptionProps>=(props)=>{
     if (props.option==="sort:asc"){
         return (
             <div className={classes.DropdownOption} onClick={sendSortAsc}>{props.option}</div>
-        );
+        );   
+    }
+    if (props.option==="max"){
+        return (
+            <div className={classes.DropdownOption} onClick={sendMax}>{props.option}</div>
+        );   
+    }
+    if (props.option==="min"){
+        return (
+            <div className={classes.DropdownOption} onClick={sendMin}>{props.option}</div>
+        );   
+    }
+    if (props.option==="avg"){
+        return (
+            <div className={classes.DropdownOption} onClick={sendAvg}>{props.option}</div>
+        );   
+    }
+    if (props.option==="count"){
+        return (
+            <div className={classes.DropdownOption} onClick={sendCount}>{props.option}</div>
+        );   
     }
     return (
         <div className={classes.DropdownOption} onClick={sendSortDesc}>{props.option}</div>

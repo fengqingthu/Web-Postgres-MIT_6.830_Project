@@ -9,7 +9,7 @@ type MemoizedContent={
     [key:string]:any;
 }
 
-const cached=new Array<number>();
+const cached=new Set<number>();
 const memoizedContent: MemoizedContent={};
 const memoizedPages: MemoizedPages={};
 export const add2cache=()=>{
@@ -52,11 +52,10 @@ export const clearAllPages=()=>{
             clearMemory(parseInt(key));
         }
     }
-    while(cached.length > 0) {
-        cached.pop();
-    }
+    cached.clear();
 }
 
 export const checkHasPage=(pageIdx:number)=>{
-    return memoizedPages.hasOwnProperty(pageIdx);
+    // return memoizedPages.hasOwnProperty(pageIdx);
+    return cached.has(pageIdx);
 }

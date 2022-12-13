@@ -1,0 +1,18 @@
+.analytics{
+    /* margin:auto; */
+    /* border: 10px solid rgb(0, 0, 0); */
+    height: 60px;
+    display: flex;
+    flex-direction: column;;
+    align-items: flex-start;
+}
+
+.aggres{
+  width: 80vw;
+  margin:2px;
+}
+
+.aggresTitle{
+  margin:0;
+  padding:0;
+}
