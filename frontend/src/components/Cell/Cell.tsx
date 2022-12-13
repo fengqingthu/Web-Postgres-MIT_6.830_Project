@@ -3,6 +3,7 @@ import classes from './Cell.module.css';
 import {useRecoilState, useRecoilValue} from "recoil";
 import {CellValueState} from "../../store/CellValueState"
 import { EvaluatedCellValueState } from '../../store/EvaluateCellValueState';
+import {QueryState} from "../../store/QueryState";
 
 export const CELL_WIDTH=100;
 export const CELL_HEIGHT=25;
@@ -16,6 +17,7 @@ export type CellProps={
 
 const Cell: FunctionComponent<CellProps>=(props)=>{
     const [cellValue,setCellValue] = useRecoilState<string>(CellValueState(props.cellId));
+    const [query,setQuery] =useRecoilState<string>(QueryState);
     // const evaluatedCellValue=useRecoilValue<string>(EvaluatedCellValueState(props.cellId));
     const [isEditMode, setISEditMode]=useState(false);
     const inputRef=useRef(null);
@@ -36,7 +38,10 @@ const Cell: FunctionComponent<CellProps>=(props)=>{
 
     const updateCellValueState=(event: ChangeEvent<HTMLInputElement>)=>{
         setCellValue(event.target.value);
-        console.log("new cell value",event.target.value);
+        console.log("current query is"+query);
+        console.log("cellid is"+props.cellId);
+        // const newQuery=query;
+        // sendSqlQuery(newQuery);
     }
     
     useEffect(()=>{

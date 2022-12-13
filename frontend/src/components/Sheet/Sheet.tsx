@@ -12,6 +12,7 @@ import { PageIdxState } from '../../store/PageIdxState';
 import AxisCellWithDropdown from '../AxisCellWithDropdown/AxisCellWithDropdown';
 import {CellValueState, fetchData} from "../../store/CellValueState";
 import {checkHasPage} from "../../utils/memoize";
+import {QueryState} from "../../store/QueryState";
 
 export type SheetProps={
   query: string;
@@ -27,6 +28,7 @@ const createAtom=(newCellIdx:string)=>{
 
 const Sheet: FunctionComponent<SheetProps>=(props)=>{
     const sheetSize=useRecoilValue(SheetSizeState);
+    const [query,setQuery] =useRecoilState<string>(QueryState);
     const [pageIndex,setPageIndex] = useRecoilState<number>(PageIdxState);
     const numberOfColumns=sheetSize.width/CELL_WIDTH;
     const numberOfRows=sheetSize.height/CELL_HEIGHT;
@@ -37,7 +39,7 @@ const Sheet: FunctionComponent<SheetProps>=(props)=>{
       setPageIndex(pageIndex+1);
       // if (!checkHasPage(pageIndex)){
       for (let i=Math.max(0,pageIndex-2);i<pageIndex+4;i++){
-        fetchData(i,props.query);
+        fetchData(i,query);
       }
       // }
     }

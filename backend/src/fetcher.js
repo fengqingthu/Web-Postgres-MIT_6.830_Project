@@ -17,7 +17,7 @@ const CREDENTIAL = {
 
 const CACHE_DIR = "./cache"
 
-const CHUNK_ROWS = 1000;     // number of rows in each file chunk
+const CHUNK_ROWS = 100;     // number of rows in each file chunk
 const CHUNK_EXT = ".json";   // each chunk is written as json
 
 const POOL = new Pool(CREDENTIAL);

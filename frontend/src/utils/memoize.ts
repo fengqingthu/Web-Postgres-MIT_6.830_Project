@@ -6,7 +6,6 @@ type MemoizedPages={
     [key:number]:MemorizedPage;
 }
 type MemoizedContent={
-    // [key: int]:MemorizedPage;
     [key:string]:any;
 }
 
@@ -29,22 +28,13 @@ export const memoize=(cellId: string,  atomFactory: any)=>{
         memoizedPages[p][cellId]=memoizedContent[cellId];
     }
     return memoizedPages[p][cellId];
-    // if(!memoizedContent.hasOwnProperty(cellId)){
-    //     // console.log("createAtom,",cellId)
-    //     memoizedContent[cellId]=atomFactory(cellId);
-    // }
-
-        
-    // };
-    // // console.log(memoizedContent);
-    // return memoizedContent[cellId];
 }
 
 
 // don't use this
-const updateMemoize=(cellId: string,  atomFactory: any)=>{
-    memoizedContent[cellId]=atomFactory(cellId);
-}
+// const updateMemoize=(cellId: string,  atomFactory: any)=>{
+//     memoizedContent[cellId]=atomFactory(cellId);
+// }
 
 
 //clear pages that are not currently relevent 
