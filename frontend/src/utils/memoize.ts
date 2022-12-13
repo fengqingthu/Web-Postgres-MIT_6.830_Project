@@ -39,11 +39,11 @@ export const memoize=(cellId: string,  atomFactory: any)=>{
 
 //clear pages that are not currently relevent 
 export const clearMemory=(page:number)=>{
-    console.log("clearing page",page)
-    for (let a in memoizedPages[page]){
-        resetRecoil(memoizedPages[page][a]);
-    }
-    delete memoizedPages[page];
+    // console.log("clearing page",page)
+    // for (let a in memoizedPages[page]){
+    //     resetRecoil(memoizedPages[page][a]);
+    // }
+    // delete memoizedPages[page];
 }
 
 export const clearAllPages=()=>{

@@ -3,5 +3,15 @@
     max-width:100px;
     height: 25px;
     border: 1px solid #777;
+    background-color: #fff;
+
+}
+
+.Selected{
+    min-width:100px;
+    max-width:100px;
+    height: 25px;
+    border: 1px solid #777;
+    background-color: rgb(255, 0, 0);
 
 }
