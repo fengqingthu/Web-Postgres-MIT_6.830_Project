@@ -151,7 +151,7 @@ const DropdownOption: FunctionComponent<DropdownOptionProps>=(props)=>{
     }
 
     const sendMax=()=>{
-        sendSqlQuery(_aggHelper(currQuery, "MAX", props));
+        sendAggQuery(_aggHelper(currQuery, "MAX", props));
     }
 
     const sendMin=()=>{
