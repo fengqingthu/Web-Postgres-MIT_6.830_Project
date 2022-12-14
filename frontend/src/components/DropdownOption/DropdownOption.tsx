@@ -70,43 +70,35 @@ const DropdownOption: FunctionComponent<DropdownOptionProps>=(props)=>{
 
     // hooks and functions for sorting
 
-    // TO DO: modify these 2 functions 
+    const _sortHelper=(currQuery:string, props:DropdownOptionProps)=>{
+        let find = currQuery.indexOf("ORDER");
+        let newQuery;
+        if (find == -1) {
+            newQuery = currQuery;
+        } else {
+            newQuery = currQuery.slice(0, find).trim();
+        }
+
+        return newQuery + " ORDER BY " + idx2Name.get(props.columnIdx);
+    }
+
     const sendSortAsc=()=>{
         console.log("before sorting, current query is"+currQuery);
         console.log("columnIdx is",props.columnIdx);
         // const newQuery=currQuery;
         // sendSqlQuery(newQuery);
 
-        let find = currQuery.indexOf("ORDER");
-        let newQuery;
-        if (find == -1) {
-            newQuery = currQuery;
-        } else {
-            newQuery = currQuery.slice(0, find).trim();
-        }
-
-        newQuery = newQuery + " ORDER BY " + idx2Name.get(props.columnIdx);
-
+        let newQuery = _sortHelper(currQuery, props);
         sendSqlQuery(newQuery);
     }
 
     const sendSortDesc=()=>{
-        console.log("prop option is"+props.option);
         console.log("before sorting, current query is"+currQuery);
         console.log("columnIdx is",props.columnIdx);
         // const newQuery=currQuery;
         // sendSqlQuery(newQuery);
 
-        let find = currQuery.indexOf("ORDER");
-        let newQuery;
-        if (find == -1) {
-            newQuery = currQuery;
-        } else {
-            newQuery = currQuery.slice(0, find).trim();
-        }
-
-        newQuery = newQuery + " ORDER BY " + idx2Name.get(props.columnIdx);
-
+        let newQuery = _sortHelper(currQuery, props) + " DESC"
         sendSqlQuery(newQuery);
     }
 
@@ -117,8 +109,8 @@ const DropdownOption: FunctionComponent<DropdownOptionProps>=(props)=>{
         // const newQuery=currQuery;
         // sendSqlQuery(newQuery);
 
-        // FIXME: trim trailing ;
-        newFilter = newFilter.slice(0, newFilter.indexOf(";"));
+        // trim trailing ";"
+        newFilter = newFilter.slice(0, newFilter.indexOf(";")).trim();
 
         let newQuery = currQuery;
 
