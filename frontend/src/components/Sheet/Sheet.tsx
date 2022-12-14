@@ -14,6 +14,7 @@ import {CellValueState, fetchData,CalAggregates} from "../../store/CellValueStat
 import {checkHasPage} from "../../utils/memoize";
 import {QueryState} from "../../store/QueryState";
 import CalAggre from "../CalAggre/CalAggre";
+import { ColumnNameState } from '../../store/ColumnNameState';
 
 export type SheetProps={
   query: string;
@@ -28,6 +29,7 @@ const createAtom=(newCellIdx:string)=>{
 
 
 const Sheet: FunctionComponent<SheetProps>=(props)=>{
+    const columnNames=useRecoilValue(ColumnNameState);
     const sheetSize=useRecoilValue(SheetSizeState);
     const [query,setQuery] =useRecoilState<string>(QueryState);
     const [multiSelect, setMultiSelect]=useState(false);
@@ -94,9 +96,25 @@ const Sheet: FunctionComponent<SheetProps>=(props)=>{
         <table className={classes.Grid}>
             <tbody>
               <Row>
-                {[...Array(numberOfColumns+1)].map((column,columnIndex)=>
-                  columnIndex!==0?<AxisCellWithDropdown key={`axisCell_${columnIndex}`} options={dropdwonOptions} columnIdx={columnIndex}>{numberToString(columnIndex)}</AxisCellWithDropdown>:<AxisCell/>
-                )}
+                {/* {[...Array(numberOfColumns+1)].map((column,columnIndex)=>
+                  columnIndex!==0?<AxisCellWithDropdown key={`axisCell_${columnIndex}`} options={dropdwonOptions} columnIdx={columnIndex}>{columnNames.columnIndex}</AxisCellWithDropdown>:<AxisCell/>
+                )} */}
+                
+                  <AxisCell/>
+                  <AxisCellWithDropdown  options={dropdwonOptions} columnIdx={1}>A: {columnNames.A}</AxisCellWithDropdown>
+                  <AxisCellWithDropdown  options={dropdwonOptions} columnIdx={2}>B: {columnNames.B}</AxisCellWithDropdown>
+                  <AxisCellWithDropdown  options={dropdwonOptions} columnIdx={3}>C: {columnNames.C}</AxisCellWithDropdown>
+                  <AxisCellWithDropdown  options={dropdwonOptions} columnIdx={4}>D: {columnNames.D}</AxisCellWithDropdown>
+                  <AxisCellWithDropdown  options={dropdwonOptions} columnIdx={5}>E: {columnNames.E}</AxisCellWithDropdown>
+                  <AxisCellWithDropdown  options={dropdwonOptions} columnIdx={6}>F</AxisCellWithDropdown>
+                  <AxisCellWithDropdown  options={dropdwonOptions} columnIdx={7}>G</AxisCellWithDropdown>
+                  <AxisCellWithDropdown  options={dropdwonOptions} columnIdx={8}>H</AxisCellWithDropdown>
+                  <AxisCellWithDropdown  options={dropdwonOptions} columnIdx={9}>I</AxisCellWithDropdown>
+                  <AxisCellWithDropdown  options={dropdwonOptions} columnIdx={10}>J</AxisCellWithDropdown>
+                  <AxisCellWithDropdown  options={dropdwonOptions} columnIdx={11}>K</AxisCellWithDropdown>
+                  
+
+                
               </Row>
                {[...Array(numberOfRows)].map((row, rowIndex)=>(
                  <Row key={rowIndex}>

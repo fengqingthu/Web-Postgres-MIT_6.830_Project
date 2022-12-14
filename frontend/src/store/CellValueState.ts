@@ -1,6 +1,7 @@
 import {atom} from "recoil";
 import {memoize, checkHasPage} from "../utils/memoize"
 import {setRecoil, getRecoil } from "recoil-nexus";
+import { ColumnNameState } from "./ColumnNameState";
 
 import {wrap} from "comlink";
 import type {CellWorker} from "../workers/worker";
@@ -48,6 +49,14 @@ export const CalAggregates=(srow:number, erow:number, scol:number, ecol:number, 
 }
 
 export const fetchFirstPage=(query:string)=>{
+    const cNames={
+        "A":"sid",
+        "B":"math",
+        "C":"phys",
+        "D": "chem",
+        "E":"bio",
+    }
+    setRecoil(ColumnNameState,cNames);
     const timer=new Date();
     console.log("Fetching page 0")
         fetch('http://localhost:8000/api/get-page', {
