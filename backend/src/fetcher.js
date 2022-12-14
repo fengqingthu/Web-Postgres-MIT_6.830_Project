@@ -23,7 +23,7 @@ const CHUNK_EXT = ".json";   // each chunk is written as json
 const POOL = new Pool(CREDENTIAL);
 
 const POLLING_INTERVAL = 1000   // in millisecond
-const MAX_RETRY_TIMES = 5
+const MAX_RETRY_TIMES = 10
 
 const ONE_MILLION = 1000000
 
@@ -124,15 +124,19 @@ const GetPage = async (query_text, pgIdx) => {
 
     let query_cache_dir = path.join(CACHE_DIR, query_text);
 
-    if (!fs.existsSync(query_cache_dir)) {
-        // query haven't initiated
+    let count = 0;
+    while (count < MAX_RETRY_TIMES && !fs.existsSync(query_cache_dir)) {
+        // query haven't initiated, busy polling
+        await _sleep(POLLING_INTERVAL);
+    }
+    if (count == MAX_RETRY_TIMES) {
         return null;
     }
 
     let chunk_path = path.join(query_cache_dir, pgIdx + CHUNK_EXT);
 
     // FIXME: currently use busy polling
-    let count = 0;
+    count = 0;
     while (count < MAX_RETRY_TIMES) {
         if (fs.existsSync(chunk_path)) {
             try {
