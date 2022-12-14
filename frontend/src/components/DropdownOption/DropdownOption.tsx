@@ -16,6 +16,7 @@ import classes from "./DropdownOption.module.css";
 import {useRecoilState} from 'recoil';
 import {PageIdxState} from '../../store/PageIdxState';
 import {QueryState} from '../../store/QueryState';
+import { fetchAggRes } from "../../store/CellValueState";
 
 export type DropdownOptionProps={
     children?: ReactNode | undefined;
@@ -162,15 +163,15 @@ const DropdownOption: FunctionComponent<DropdownOptionProps>=(props)=>{
     }
 
     const sendMin=()=>{
-        sendSqlQuery(_aggHelper(currQuery, "MIN", props));
+        sendAggQuery(_aggHelper(currQuery, "MIN", props));
     }
 
     const sendAvg=()=>{
-        sendSqlQuery(_aggHelper(currQuery, "AVG", props));
+        sendAggQuery(_aggHelper(currQuery, "AVG", props));
     }
 
     const sendCount=()=>{
-        sendSqlQuery(_aggHelper(currQuery, "COUNT", props));
+        sendAggQuery(_aggHelper(currQuery, "COUNT", props));
     }
 
     // function for fetch pages / get data 
@@ -189,6 +190,15 @@ const DropdownOption: FunctionComponent<DropdownOptionProps>=(props)=>{
           fetchData(i,sqlQuery);
         }
     }
+
+    const sendAggQuery=(sqlQuery:string)=>{
+        //sending query and go to the first page
+        console.log("sending aggregate by column query: ",sqlQuery);
+        sendQuery(sqlQuery);
+  
+        fetchAggRes(sqlQuery);
+        
+    };
 
     if (props.option==="filter"){
         return (

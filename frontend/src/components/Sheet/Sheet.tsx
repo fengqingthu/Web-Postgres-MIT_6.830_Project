@@ -84,7 +84,7 @@ const Sheet: FunctionComponent<SheetProps>=(props)=>{
     return (
       <div className={classes.excelContainer}>
         <div className={classes.sheetBar}>
-           <h3>Page: {pageIndex},scell:{scell},ecell{ecell}</h3>
+           <h3>Page: {pageIndex}</h3>
            
            {/* <h6>page: {pageIndex}</h6> */}
            <div>
@@ -101,17 +101,18 @@ const Sheet: FunctionComponent<SheetProps>=(props)=>{
                 )} */}
                 
                   <AxisCell/>
-                  <AxisCellWithDropdown  options={dropdwonOptions} columnIdx={1}>A: {columnNames.A}</AxisCellWithDropdown>
-                  <AxisCellWithDropdown  options={dropdwonOptions} columnIdx={2}>B: {columnNames.B}</AxisCellWithDropdown>
-                  <AxisCellWithDropdown  options={dropdwonOptions} columnIdx={3}>C: {columnNames.C}</AxisCellWithDropdown>
-                  <AxisCellWithDropdown  options={dropdwonOptions} columnIdx={4}>D: {columnNames.D}</AxisCellWithDropdown>
-                  <AxisCellWithDropdown  options={dropdwonOptions} columnIdx={5}>E: {columnNames.E}</AxisCellWithDropdown>
+                  <AxisCellWithDropdown  options={dropdwonOptions} columnIdx={1}>{columnNames.A}</AxisCellWithDropdown>
+                  <AxisCellWithDropdown  options={dropdwonOptions} columnIdx={2}>{columnNames.B}</AxisCellWithDropdown>
+                  <AxisCellWithDropdown  options={dropdwonOptions} columnIdx={3}>{columnNames.C}</AxisCellWithDropdown>
+                  <AxisCellWithDropdown  options={dropdwonOptions} columnIdx={4}>{columnNames.D}</AxisCellWithDropdown>
+                  <AxisCellWithDropdown  options={dropdwonOptions} columnIdx={5}>{columnNames.E}</AxisCellWithDropdown>
                   <AxisCellWithDropdown  options={dropdwonOptions} columnIdx={6}>F</AxisCellWithDropdown>
                   <AxisCellWithDropdown  options={dropdwonOptions} columnIdx={7}>G</AxisCellWithDropdown>
                   <AxisCellWithDropdown  options={dropdwonOptions} columnIdx={8}>H</AxisCellWithDropdown>
                   <AxisCellWithDropdown  options={dropdwonOptions} columnIdx={9}>I</AxisCellWithDropdown>
                   <AxisCellWithDropdown  options={dropdwonOptions} columnIdx={10}>J</AxisCellWithDropdown>
                   <AxisCellWithDropdown  options={dropdwonOptions} columnIdx={11}>K</AxisCellWithDropdown>
+                  <AxisCellWithDropdown  options={dropdwonOptions} columnIdx={11}>L</AxisCellWithDropdown>
                   
 
                 

@@ -3,6 +3,7 @@ import classes from './CalAggre.module.css';
 import { CalAggregates } from '../../store/CellValueState';
 import { PageIdxState } from '../../store/PageIdxState';
 import { useRecoilValue } from 'recoil';
+import { AggResState } from '../../store/AggResState';
 
 export type CalAggreProps={
     scell:string;
@@ -20,6 +21,7 @@ const CalAggre: FunctionComponent<CalAggreProps>=(props)=>{
     const erow=parseInt(props.ecell.split(", ")[0]);
     const ecol=parseInt(props.ecell.split(", ")[1]);
     const pid =useRecoilValue<number>(PageIdxState);
+    const aggRes =useRecoilValue<string>(AggResState);
     let info:{[op:string]:number}={};
 
     useEffect(() => {
@@ -33,6 +35,7 @@ const CalAggre: FunctionComponent<CalAggreProps>=(props)=>{
       return <div className={classes.analytics}>
         <h4 className={classes.aggresTitle}>Analytics</h4>
         <p className={classes.aggres}>Cell Selected: {count}, Sum:{sum}, Min Value: {min}, Max Value: {max}, Average: {avg}</p>
+        <p className={classes.aggres}>Aggregation by column: {aggRes}</p>
         </div>;
     
 }
